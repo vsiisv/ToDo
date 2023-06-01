@@ -95,15 +95,9 @@ class ToDoTableViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: true)
 		
-		context.delete(array[indexPath.row])
-		array.remove(at: indexPath.row)
-		
-//		array[indexPath.row].done = !array[indexPath.row].done
-		
+		array[indexPath.row].done = !array[indexPath.row].done
 		saveItems()
-
-		tableView.deleteRows(at: [indexPath], with: .automatic)
-//		tableView.reloadRows(at: [indexPath], with: .automatic)
+		tableView.reloadRows(at: [indexPath], with: .automatic)
 	}
    
 }
