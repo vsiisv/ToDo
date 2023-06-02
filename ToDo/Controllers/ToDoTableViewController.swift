@@ -13,6 +13,7 @@ class ToDoTableViewController: UITableViewController {
 	private var array = [Item]()
 	private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
+	private let searchController = UISearchController()
 	// MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -20,6 +21,8 @@ class ToDoTableViewController: UITableViewController {
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "list")
 		style()
 		loadItems()
+		
+		searchController.searchBar.delegate = self
     }
 	
 	// MARK: - Methods
@@ -61,13 +64,13 @@ class ToDoTableViewController: UITableViewController {
 	}
 	
 	// Load Items from CoreDate
-	private func loadItems() {
-		let request: NSFetchRequest<Item> = Item.fetchRequest()
+	private func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
 		do {
 			array = try context.fetch(request)
 		} catch {
 			print("Error fetching data from context \(error)")
 		}
+		tableView.reloadData()
 	}
 
     // MARK: - Table view data source
@@ -99,11 +102,52 @@ class ToDoTableViewController: UITableViewController {
 		saveItems()
 		tableView.reloadRows(at: [indexPath], with: .automatic)
 	}
-   
 }
+
+// MARK: - SearchBar Delegate
+
+extension ToDoTableViewController: UISearchBarDelegate {
+	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//		let request: NSFetchRequest<Item> = Item.fetchRequest()
+//
+//		// FIXME: Optional binding
+//		request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+//
+//		request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+//		loadItems(with: request)
+	}
+	
+	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+		if searchBar.text?.count == 0 {
+			loadItems()
+			
+//			DispatchQueue.main.async {
+//				searchBar.resignFirstResponder()
+//			}
+		} else {
+			let request: NSFetchRequest<Item> = Item.fetchRequest()
+			
+			// FIXME: Optional binding
+			request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+			
+			request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+			loadItems(with: request)
+		}
+	}
+	
+	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+		if searchBar.text!.count > 0 {
+			loadItems()
+		}
+	}
+}
+
+// MARK: - Style
 
 private extension ToDoTableViewController {
 	func style() {
+		
+		navigationItem.searchController = searchController
 		navigationItem.title = "Lists"
 		navigationItem.rightBarButtonItem = UIBarButtonItem(
 			barButtonSystemItem: .add,
