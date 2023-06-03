@@ -14,6 +14,7 @@
 		2F7764D92A24C5D9001BF358 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F7764D72A24C5D9001BF358 /* LaunchScreen.storyboard */; };
 		2F7764E12A24C62A001BF358 /* ToDoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7764E02A24C62A001BF358 /* ToDoTableViewController.swift */; };
 		2F7765092A286443001BF358 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2F7765072A286443001BF358 /* DataModel.xcdatamodeld */; };
+		2F77652E2A2978F5001BF358 /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F77652D2A2978F5001BF358 /* CategoryTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		2F7764DA2A24C5D9001BF358 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F7764E02A24C62A001BF358 /* ToDoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoTableViewController.swift; sourceTree = "<group>"; };
 		2F7765082A286443001BF358 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		2F77652D2A2978F5001BF358 /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				2F7764E02A24C62A001BF358 /* ToDoTableViewController.swift */,
+				2F77652D2A2978F5001BF358 /* CategoryTableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -167,6 +170,7 @@
 			files = (
 				2F7765092A286443001BF358 /* DataModel.xcdatamodeld in Sources */,
 				2F7764CD2A24C5D7001BF358 /* AppDelegate.swift in Sources */,
+				2F77652E2A2978F5001BF358 /* CategoryTableViewController.swift in Sources */,
 				2F7764E12A24C62A001BF358 /* ToDoTableViewController.swift in Sources */,
 				2F7764CF2A24C5D7001BF358 /* SceneDelegate.swift in Sources */,
 			);

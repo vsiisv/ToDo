@@ -10,7 +10,13 @@ import CoreData
 
 class ToDoTableViewController: UITableViewController {
 	
-	private var array = [Item]()
+	var array = [Item]()
+	var selectedCategory: CategoryList? {
+		didSet {
+			loadItems()
+		}
+	}
+	
 	private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
 	private let searchController = UISearchController()
@@ -20,7 +26,7 @@ class ToDoTableViewController: UITableViewController {
         super.viewDidLoad()
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "list")
 		style()
-		loadItems()
+//		loadItems()
 		
 		searchController.searchBar.delegate = self
     }
@@ -38,6 +44,7 @@ class ToDoTableViewController: UITableViewController {
 				let item = Item(context: self.context)
 				item.title = text
 				item.done = false
+				item.parentCategory = self.selectedCategory
 				
 				self.array.append(item)
 				self.tableView.insertRows(at: [IndexPath(row: self.array.count - 1, section: 0)], with: .automatic)
@@ -64,7 +71,15 @@ class ToDoTableViewController: UITableViewController {
 	}
 	
 	// Load Items from CoreDate
-	private func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
+	private func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
+		
+		let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+		if let additionalPredicate = predicate {
+			request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
+		} else {
+			request.predicate = categoryPredicate
+		}
+		
 		do {
 			array = try context.fetch(request)
 		} catch {
@@ -111,10 +126,10 @@ extension ToDoTableViewController: UISearchBarDelegate {
 //		let request: NSFetchRequest<Item> = Item.fetchRequest()
 //
 //		// FIXME: Optional binding
-//		request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+//		let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
 //
 //		request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//		loadItems(with: request)
+//		loadItems(with: request, predicate: predicate)
 	}
 	
 	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -126,12 +141,13 @@ extension ToDoTableViewController: UISearchBarDelegate {
 //			}
 		} else {
 			let request: NSFetchRequest<Item> = Item.fetchRequest()
-			
+
 			// FIXME: Optional binding
-			request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-			
+			let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+
 			request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-			loadItems(with: request)
+			loadItems(with: request, predicate: predicate)
+			
 		}
 	}
 	
