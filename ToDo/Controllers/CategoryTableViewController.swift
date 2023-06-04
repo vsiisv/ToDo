@@ -6,12 +6,13 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class CategoryTableViewController: UITableViewController {
 	
-	private var categories = [CategoryList]()
-	private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+	let realm = try! Realm()
+	
+	private var categories: Results<Category>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,14 +29,14 @@ class CategoryTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return categories.count
+		return categories?.count ?? 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "category", for: indexPath)
 
 		var content = cell.defaultContentConfiguration()
-		content.text = categories[indexPath.row].name
+		content.text = categories?[indexPath.row].name ?? "No Categories Added yet"
 		cell.contentConfiguration = content
 
         return cell
@@ -46,7 +47,7 @@ class CategoryTableViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let vc = ToDoTableViewController()
 		
-		vc.selectedCategory = categories[indexPath.row]
+		vc.selectedCategory = categories?[indexPath.row]
 		
 		navigationController?.pushViewController(vc, animated: true)
 	}
@@ -57,30 +58,30 @@ class CategoryTableViewController: UITableViewController {
 
 private extension CategoryTableViewController {
 	@objc func addCategory() {
-		let category = CategoryList(context: self.context)
-		category.name = "New category 3"
-		categories.append(category)
-		self.tableView.insertRows(at: [IndexPath(row: self.categories.count - 1, section: 0)], with: .automatic)
+		let category = Category()
+		category.name = "New category 7"
 		
-		saveCategory()
+		save(category: category)
+		
+		if let categories = self.categories {
+			self.tableView.insertRows(at: [IndexPath(row: categories.count - 1, section: 0)], with: .automatic)
+		}
 	}
 	
-	// Save item in CoreData
-	private func saveCategory() {
+	// Save item in Realm
+	private func save(category: Category) {
 		do {
-			try context.save()
+			try realm.write {
+				realm.add(category)
+			}
 		} catch {
 			print("Error saving context \(error)")
 		}
 	}
 	
-	// Load Items from CoreData
-	private func loadCategories(with request: NSFetchRequest<CategoryList> = CategoryList.fetchRequest()) {
-		do {
-			categories = try context.fetch(request)
-		} catch {
-			print("Error fetching data from context \(error)")
-		}
+	// Load Items from Realm
+	private func loadCategories() {
+		categories = realm.objects(Category.self)
 		tableView.reloadData()
 	}
 }
@@ -90,7 +91,7 @@ private extension CategoryTableViewController {
 private extension CategoryTableViewController {
 	func styleOfNavigationController() {
 		title = "Category"
-		
+
 		navigationItem.rightBarButtonItem = UIBarButtonItem(
 			barButtonSystemItem: .add,
 			target: self,

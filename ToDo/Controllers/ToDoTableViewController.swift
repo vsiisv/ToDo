@@ -6,20 +6,21 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class ToDoTableViewController: UITableViewController {
 	
-	var array = [Item]()
-	var selectedCategory: CategoryList? {
+	var array: Results<Item>?
+	let realm = try! Realm()
+	
+	var selectedCategory: Category? {
 		didSet {
 			loadItems()
 		}
 	}
 	
-	private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
 	private let searchController = UISearchController()
+	
 	// MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -28,7 +29,7 @@ class ToDoTableViewController: UITableViewController {
 		style()
 //		loadItems()
 		
-		searchController.searchBar.delegate = self
+//		searchController.searchBar.delegate = self
     }
 	
 	// MARK: - Methods
@@ -40,17 +41,22 @@ class ToDoTableViewController: UITableViewController {
 		let alert = UIAlertController(title: "Add List", message: nil, preferredStyle: .alert)
 		let action = UIAlertAction(title: "Add", style: .default) { actin in
 			if let text = textField.text, text != "" {
-				
-				let item = Item(context: self.context)
-				item.title = text
-				item.done = false
-				item.parentCategory = self.selectedCategory
-				
-				self.array.append(item)
-				self.tableView.insertRows(at: [IndexPath(row: self.array.count - 1, section: 0)], with: .automatic)
+				guard let currentCategory = self.selectedCategory else { return }
+				do {
+					try self.realm.write {
+						let item = Item()
+						item.title = text
+						currentCategory.items.append(item)
+					}
+				} catch {
+					print("Error saving new items, \(error)")
+				}
 			}
 			
-			self.saveItems()
+//			if let array = self.array {
+//				self.tableView.insertRows(at: [IndexPath(row: array.count - 1, section: 0)], with: .automatic)
+//			}
+			self.tableView.reloadData()
 		}
 		
 		alert.addTextField { alertTextField in
@@ -62,49 +68,41 @@ class ToDoTableViewController: UITableViewController {
 	}
 	
 	// Save item in CoreData
-	private func saveItems() {
-		do {
-			try context.save()
-		} catch {
-			print("Error saving context \(error)")
-		}
-	}
+//	private func saveItems(item: Item) {
+//		do {
+////			try context.save()
+//			try realm.write {
+//				realm.add(item)
+//			}
+//		} catch {
+//			print("Error saving context \(error)")
+//		}
+//	}
 	
 	// Load Items from CoreDate
-	private func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
-		
-		let categoryPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-		if let additionalPredicate = predicate {
-			request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [categoryPredicate, additionalPredicate])
-		} else {
-			request.predicate = categoryPredicate
-		}
-		
-		do {
-			array = try context.fetch(request)
-		} catch {
-			print("Error fetching data from context \(error)")
-		}
+	private func loadItems() {
+		array = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
 		tableView.reloadData()
 	}
 
     // MARK: - Table view data source
 	
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return array.count
+		return array?.count ?? 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "list", for: indexPath)
-		let item = array[indexPath.row]
 		
 		var content = cell.defaultContentConfiguration()
-		content.text = array[indexPath.row].title
 		
-		cell.accessoryType = (item.done == true ? .checkmark : .none)
-
+		if let item = array?[indexPath.row] {
+			content.text = item.title
+			cell.accessoryType = (item.done == true ? .checkmark : .none)
+		} else {
+			content.text = "No items added"
+		}
 		cell.contentConfiguration = content
-
         return cell
     }
 	
@@ -113,50 +111,50 @@ class ToDoTableViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: true)
 		
-		array[indexPath.row].done = !array[indexPath.row].done
-		saveItems()
-		tableView.reloadRows(at: [indexPath], with: .automatic)
+//		array[indexPath.row].done = !array[indexPath.row].done
+//		saveItems()
+//		tableView.reloadRows(at: [indexPath], with: .automatic)
 	}
 }
 
 // MARK: - SearchBar Delegate
 
-extension ToDoTableViewController: UISearchBarDelegate {
-	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//		let request: NSFetchRequest<Item> = Item.fetchRequest()
+//extension ToDoTableViewController: UISearchBarDelegate {
+//	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+////		let request: NSFetchRequest<Item> = Item.fetchRequest()
+////
+////		// FIXME: Optional binding
+////		let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+////
+////		request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+////		loadItems(with: request, predicate: predicate)
+//	}
 //
-//		// FIXME: Optional binding
-//		let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+//	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//		if searchBar.text?.count == 0 {
+//			loadItems()
 //
-//		request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//		loadItems(with: request, predicate: predicate)
-	}
-	
-	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-		if searchBar.text?.count == 0 {
-			loadItems()
-			
-//			DispatchQueue.main.async {
-//				searchBar.resignFirstResponder()
-//			}
-		} else {
-			let request: NSFetchRequest<Item> = Item.fetchRequest()
-
-			// FIXME: Optional binding
-			let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-
-			request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-			loadItems(with: request, predicate: predicate)
-			
-		}
-	}
-	
-	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-		if searchBar.text!.count > 0 {
-			loadItems()
-		}
-	}
-}
+////			DispatchQueue.main.async {
+////				searchBar.resignFirstResponder()
+////			}
+//		} else {
+//			let request: NSFetchRequest<Item> = Item.fetchRequest()
+//
+//			// FIXME: Optional binding
+//			let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+//
+//			request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+//			loadItems(with: request, predicate: predicate)
+//
+//		}
+//	}
+//
+//	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//		if searchBar.text!.count > 0 {
+//			loadItems()
+//		}
+//	}
+//}
 
 // MARK: - Style
 
