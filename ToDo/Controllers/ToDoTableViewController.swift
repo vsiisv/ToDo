@@ -79,7 +79,7 @@ class ToDoTableViewController: UITableViewController {
 //		}
 //	}
 	
-	// Load Items from CoreDate
+	// Load Items from Realm
 	private func loadItems() {
 		array = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
 		tableView.reloadData()
@@ -111,9 +111,16 @@ class ToDoTableViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: true)
 		
-//		array[indexPath.row].done = !array[indexPath.row].done
-//		saveItems()
-//		tableView.reloadRows(at: [indexPath], with: .automatic)
+		if let item = array?[indexPath.row] {
+			do {
+				try realm.write{
+					item.done = !item.done
+				}
+			} catch {
+				print("Error saving done status, \(error)")
+			}
+		}
+		tableView.reloadRows(at: [indexPath], with: .automatic)
 	}
 }
 
