@@ -114,13 +114,15 @@ class ToDoTableViewController: UITableViewController {
 		if let item = array?[indexPath.row] {
 			do {
 				try realm.write{
-					item.done = !item.done
+					realm.delete(item)
+//					item.done = !item.done
 				}
 			} catch {
 				print("Error saving done status, \(error)")
 			}
 		}
-		tableView.reloadRows(at: [indexPath], with: .automatic)
+		tableView.deleteRows(at: [indexPath], with: .automatic)
+//		tableView.reloadRows(at: [indexPath], with: .automatic)
 	}
 }
 
