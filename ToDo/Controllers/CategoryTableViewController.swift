@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class CategoryTableViewController: SwipeTableViewController {
 	
@@ -19,7 +20,7 @@ class CategoryTableViewController: SwipeTableViewController {
 
 //		tableView.register(SwipeTableViewCell.self, forCellReuseIdentifier: "category")
 		
-		styleOfNavigationController()
+		style()
 		
 //		print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
 		
@@ -39,7 +40,11 @@ class CategoryTableViewController: SwipeTableViewController {
 		var content = cell.defaultContentConfiguration()
 		content.text = categories?[indexPath.row].name ?? "No Categories Added yet"
 		cell.contentConfiguration = content
-
+		
+		if let color = categories?[indexPath.row].color {
+			cell.backgroundColor = UIColor(hexString: color)
+		}
+		
         return cell
     }
 	
@@ -74,6 +79,7 @@ private extension CategoryTableViewController {
 	@objc func addCategory() {
 		let category = Category()
 		category.name = "New category 7"
+		category.color = UIColor.randomFlat().hexValue()
 		
 		save(category: category)
 		
@@ -103,13 +109,15 @@ private extension CategoryTableViewController {
 // MARK: - Style
 
 private extension CategoryTableViewController {
-	func styleOfNavigationController() {
+	func style() {
 		title = "Category"
-
+		
 		navigationItem.rightBarButtonItem = UIBarButtonItem(
 			barButtonSystemItem: .add,
 			target: self,
 			action: #selector(addCategory)
 		)
+		
+		tableView.separatorStyle = .none
 	}
 }

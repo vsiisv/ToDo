@@ -20,9 +20,11 @@
 		2FDEDA8F2A2B47F700442CD8 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDEDA8E2A2B47F700442CD8 /* Category.swift */; };
 		2FDEDA922A2D925A00442CD8 /* SwipeCellKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2FDEDA912A2D925A00442CD8 /* SwipeCellKit */; };
 		2FDEDA942A2D9E0700442CD8 /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDEDA932A2D9E0700442CD8 /* SwipeTableViewController.swift */; };
+		A474CBC01BAC8E301BD09D04 /* Pods_ToDo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C03F926B9AAC96EDCC39AED3 /* Pods_ToDo.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		13B1C0E36EAA54423C1B9E97 /* Pods-ToDo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDo.debug.xcconfig"; path = "Target Support Files/Pods-ToDo/Pods-ToDo.debug.xcconfig"; sourceTree = "<group>"; };
 		2F7764C92A24C5D7001BF358 /* ToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F7764CC2A24C5D7001BF358 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2F7764CE2A24C5D7001BF358 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -35,6 +37,8 @@
 		2FDEDA8C2A2B47EB00442CD8 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		2FDEDA8E2A2B47F700442CD8 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		2FDEDA932A2D9E0700442CD8 /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
+		8BE392058046066BFF337166 /* Pods-ToDo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDo.release.xcconfig"; path = "Target Support Files/Pods-ToDo/Pods-ToDo.release.xcconfig"; sourceTree = "<group>"; };
+		C03F926B9AAC96EDCC39AED3 /* Pods_ToDo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,17 +49,29 @@
 				2FDEDA8B2A2B435200442CD8 /* RealmSwift in Frameworks */,
 				2FDEDA922A2D925A00442CD8 /* SwipeCellKit in Frameworks */,
 				2FDEDA892A2B435200442CD8 /* Realm in Frameworks */,
+				A474CBC01BAC8E301BD09D04 /* Pods_ToDo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1900948D340F48137059A837 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				13B1C0E36EAA54423C1B9E97 /* Pods-ToDo.debug.xcconfig */,
+				8BE392058046066BFF337166 /* Pods-ToDo.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		2F7764C02A24C5D7001BF358 = {
 			isa = PBXGroup;
 			children = (
 				2F7764CB2A24C5D7001BF358 /* ToDo */,
 				2F7764CA2A24C5D7001BF358 /* Products */,
+				1900948D340F48137059A837 /* Pods */,
+				3294C6D5179CA9EA319E1681 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -109,6 +125,14 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
+		3294C6D5179CA9EA319E1681 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C03F926B9AAC96EDCC39AED3 /* Pods_ToDo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -116,9 +140,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2F7764DD2A24C5D9001BF358 /* Build configuration list for PBXNativeTarget "ToDo" */;
 			buildPhases = (
+				105D5E7790FE16284DCDC987 /* [CP] Check Pods Manifest.lock */,
 				2F7764C52A24C5D7001BF358 /* Sources */,
 				2F7764C62A24C5D7001BF358 /* Frameworks */,
 				2F7764C72A24C5D7001BF358 /* Resources */,
+				58D4BA15FEE89FEA081C99CF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -159,7 +185,7 @@
 			);
 			mainGroup = 2F7764C02A24C5D7001BF358;
 			packageReferences = (
-				2FDEDA872A2B435200442CD8 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				2FDEDA872A2B435200442CD8 /* XCRemoteSwiftPackageReference "realm-swift.git" */,
 				2FDEDA902A2D925900442CD8 /* XCRemoteSwiftPackageReference "SwipeCellKit" */,
 			);
 			productRefGroup = 2F7764CA2A24C5D7001BF358 /* Products */;
@@ -183,6 +209,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		105D5E7790FE16284DCDC987 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ToDo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		58D4BA15FEE89FEA081C99CF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ToDo/Pods-ToDo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ToDo/Pods-ToDo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ToDo/Pods-ToDo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2F7764C52A24C5D7001BF358 /* Sources */ = {
@@ -337,6 +405,7 @@
 		};
 		2F7764DE2A24C5D9001BF358 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 13B1C0E36EAA54423C1B9E97 /* Pods-ToDo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -350,6 +419,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -365,6 +435,7 @@
 		};
 		2F7764DF2A24C5D9001BF358 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8BE392058046066BFF337166 /* Pods-ToDo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -378,6 +449,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -415,7 +487,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		2FDEDA872A2B435200442CD8 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+		2FDEDA872A2B435200442CD8 /* XCRemoteSwiftPackageReference "realm-swift.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
 			requirement = {
@@ -436,12 +508,12 @@
 /* Begin XCSwiftPackageProductDependency section */
 		2FDEDA882A2B435200442CD8 /* Realm */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 2FDEDA872A2B435200442CD8 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			package = 2FDEDA872A2B435200442CD8 /* XCRemoteSwiftPackageReference "realm-swift.git" */;
 			productName = Realm;
 		};
 		2FDEDA8A2A2B435200442CD8 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 2FDEDA872A2B435200442CD8 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			package = 2FDEDA872A2B435200442CD8 /* XCRemoteSwiftPackageReference "realm-swift.git" */;
 			productName = RealmSwift;
 		};
 		2FDEDA912A2D925A00442CD8 /* SwipeCellKit */ = {
