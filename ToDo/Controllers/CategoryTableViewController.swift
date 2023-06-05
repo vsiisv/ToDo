@@ -26,6 +26,10 @@ class CategoryTableViewController: SwipeTableViewController {
 		
 		loadCategories()
     }
+	
+	override func viewWillAppear(_ animated: Bool) {
+		styleOfNavigationBar()
+	}
 
     // MARK: - Table view data source
 
@@ -36,15 +40,18 @@ class CategoryTableViewController: SwipeTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		
 		let cell = super.tableView(tableView, cellForRowAt: indexPath)
-		
 		var content = cell.defaultContentConfiguration()
-		content.text = categories?[indexPath.row].name ?? "No Categories Added yet"
-		cell.contentConfiguration = content
 		
-		if let color = categories?[indexPath.row].color {
-			cell.backgroundColor = UIColor(hexString: color)
+		if let category = categories?[indexPath.row] {
+			content.text = category.name
+			
+			guard let categoryColor = UIColor(hexString: category.color) else { fatalError() }
+			cell.backgroundColor = categoryColor
+			content.textProperties.color = ContrastColorOf(categoryColor, returnFlat: true)
 		}
 		
+		cell.contentConfiguration = content
+
         return cell
     }
 	
@@ -119,5 +126,22 @@ private extension CategoryTableViewController {
 		)
 		
 		tableView.separatorStyle = .none
+	}
+	
+	func styleOfNavigationBar() {
+		let navigationBarAppearance = UINavigationBarAppearance()
+		navigationBarAppearance.backgroundColor =  UIColor(hexString: "1D9BF6")
+		navigationController?.navigationBar.tintColor = .white
+		
+		navigationBarAppearance.titleTextAttributes = [
+			.foregroundColor: UIColor.white
+		]
+		navigationBarAppearance.largeTitleTextAttributes = [
+			.foregroundColor: UIColor.white
+		]
+		
+		navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+		navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+		navigationController?.navigationBar.prefersLargeTitles = true
 	}
 }

@@ -26,11 +26,14 @@ class ToDoTableViewController: SwipeTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "list")
-		style()
+//		style()
 //		loadItems()
 		searchController.searchBar.delegate = self
     }
+	
+	override func viewWillAppear(_ animated: Bool) {
+		style()
+	}
 	
 	// MARK: - Methods
 	
@@ -171,8 +174,31 @@ extension ToDoTableViewController: UISearchBarDelegate {
 private extension ToDoTableViewController {
 	func style() {
 		
+		if let colorHex = selectedCategory?.color {
+			
+			if let navBarColor = UIColor(hexString: colorHex) {
+				let navigationBarAppearance = UINavigationBarAppearance()
+				navigationBarAppearance.backgroundColor = navBarColor
+				navigationController?.navigationBar.tintColor = ContrastColorOf(navBarColor, returnFlat: true)
+				navigationBarAppearance.titleTextAttributes = [
+					.foregroundColor: ContrastColorOf(navBarColor, returnFlat: true)
+				]
+				navigationBarAppearance.largeTitleTextAttributes = [
+					.foregroundColor: ContrastColorOf(navBarColor, returnFlat: true)
+				]
+				
+				navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+				navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+				
+				searchController.searchBar.backgroundColor = navBarColor
+			}
+		}
+		
+		navigationController?.navigationBar.prefersLargeTitles = true
+		
 		navigationItem.searchController = searchController
-		navigationItem.title = "Lists"
+		navigationItem.title = selectedCategory?.name
+		
 		navigationItem.rightBarButtonItem = UIBarButtonItem(
 			barButtonSystemItem: .add,
 			target: self,
@@ -180,5 +206,7 @@ private extension ToDoTableViewController {
 		)
 		
 		tableView.separatorStyle = .none
+		
+		
 	}
 }
