@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class ToDoTableViewController: SwipeTableViewController {
 	
@@ -88,6 +89,13 @@ class ToDoTableViewController: SwipeTableViewController {
 		if let item = array?[indexPath.row] {
 			content.text = item.title
 			cell.accessoryType = (item.done == true ? .checkmark : .none)
+			
+			let categoryColor = UIColor(hexString: selectedCategory?.color ?? "#00FFFF")
+			
+			if let color = categoryColor?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(array!.count)) {
+				cell.backgroundColor = color
+				content.textProperties.color = ContrastColorOf(color, returnFlat: true)
+			}
 		} else {
 			content.text = "No items added"
 		}
@@ -170,5 +178,7 @@ private extension ToDoTableViewController {
 			target: self,
 			action: #selector(addList)
 		)
+		
+		tableView.separatorStyle = .none
 	}
 }
