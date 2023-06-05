@@ -28,8 +28,7 @@ class ToDoTableViewController: UITableViewController {
 		tableView.register(UITableViewCell.self, forCellReuseIdentifier: "list")
 		style()
 //		loadItems()
-		
-//		searchController.searchBar.delegate = self
+		searchController.searchBar.delegate = self
     }
 	
 	// MARK: - Methods
@@ -46,6 +45,7 @@ class ToDoTableViewController: UITableViewController {
 					try self.realm.write {
 						let item = Item()
 						item.title = text
+						item.date = Date()
 						currentCategory.items.append(item)
 					}
 				} catch {
@@ -66,18 +66,6 @@ class ToDoTableViewController: UITableViewController {
 		alert.addAction(action)
 		present(alert, animated: true)
 	}
-	
-	// Save item in CoreData
-//	private func saveItems(item: Item) {
-//		do {
-////			try context.save()
-//			try realm.write {
-//				realm.add(item)
-//			}
-//		} catch {
-//			print("Error saving context \(error)")
-//		}
-//	}
 	
 	// Load Items from Realm
 	private func loadItems() {
@@ -128,42 +116,32 @@ class ToDoTableViewController: UITableViewController {
 
 // MARK: - SearchBar Delegate
 
-//extension ToDoTableViewController: UISearchBarDelegate {
-//	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-////		let request: NSFetchRequest<Item> = Item.fetchRequest()
-////
-////		// FIXME: Optional binding
-////		let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-////
-////		request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-////		loadItems(with: request, predicate: predicate)
-//	}
-//
-//	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//		if searchBar.text?.count == 0 {
-//			loadItems()
-//
-////			DispatchQueue.main.async {
-////				searchBar.resignFirstResponder()
-////			}
-//		} else {
-//			let request: NSFetchRequest<Item> = Item.fetchRequest()
-//
-//			// FIXME: Optional binding
-//			let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-//
-//			request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//			loadItems(with: request, predicate: predicate)
-//
-//		}
-//	}
-//
-//	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-//		if searchBar.text!.count > 0 {
-//			loadItems()
-//		}
-//	}
-//}
+extension ToDoTableViewController: UISearchBarDelegate {
+	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+		
+		array = array?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "date", ascending: true)
+		tableView.reloadData()
+	}
+
+	func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+		if searchBar.text?.count == 0 {
+			loadItems()
+			print(1)
+//			DispatchQueue.main.async {
+//				searchBar.resignFirstResponder()
+//			}
+		} else {
+			array = array?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "date", ascending: true)
+			tableView.reloadData()
+		}
+	}
+
+	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+		if searchBar.text!.count > 0 {
+			loadItems()
+		}
+	}
+}
 
 // MARK: - Style
 
